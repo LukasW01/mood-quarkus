@@ -4,6 +4,7 @@ import dev.wigger.mood.util.enums.Permissions
 import dev.wigger.mood.util.mapper.WebApplicationMapperException
 import jakarta.enterprise.context.ApplicationScoped
 import jakarta.inject.Inject
+import java.time.LocalDate
 import java.util.*
 
 @ApplicationScoped
@@ -24,6 +25,14 @@ class EntryService {
     
     fun findEntityByIdAndUserId(id: UUID, userId: Long): Entry = entryRepository.findByIdAndUserId(id, userId)
         ?: throw WebApplicationMapperException("No Entry found", 404)
+
+    fun findByUserIdAndDateException(userId: Long, date: List<LocalDate>) {
+        if (entryRepository.findByUserIdAndDate(userId, date).isNullOrEmpty()) {
+            null
+        } else {
+            throw WebApplicationMapperException("An entry already exists on this day", 422)
+        }
+    }
     
     fun findByUserIdPermission(userId: Long, permissions: Permissions): List<Entry>? = when (permissions) {
         Permissions.ALL ->

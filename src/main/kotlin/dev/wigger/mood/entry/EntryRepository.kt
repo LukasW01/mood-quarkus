@@ -15,6 +15,8 @@ class EntryRepository : PanacheRepository<Entry> {
 
     fun findByUserIdForLastSevenDays(userId: Long): List<Entry>? = find("user.id = ?1 and date >= ?2 ", userId, LocalDate.now().minusDays(7)).list()
 
+    fun findByUserIdAndDate(userId: Long, date: List<LocalDate>): MutableList<Entry>? = list("user.id = ?1 and date in ?2", userId, date)
+    
     fun findByIdAndUserId(id: UUID, userId: Long): Entry? = find("id = ?1 and user.id = ?2", id, userId).firstResult()
 
     fun findByUuid(id: UUID): Entry? = find("id = ?1", id).firstResult()

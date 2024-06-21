@@ -19,7 +19,13 @@ Authorization: Bearer {{auth_token}}
   {
     "mood": "BAD",
     "journal": "I'm feeling bad today :/",
-    "date": "2023-03-10",
+    "date": "2023-03-15",
+    "color": "#FF0000"
+  },
+  {
+    "mood": "BAD",
+    "journal": "I'm feeling bad today :/",
+    "date": "2023-03-15",
     "color": "#FF0000"
   }
 ]

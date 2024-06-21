@@ -4,6 +4,7 @@ import dev.wigger.mood.dto.*
 import dev.wigger.mood.entry.Entry
 import dev.wigger.mood.entry.EntryService
 import dev.wigger.mood.user.UserService
+import dev.wigger.mood.util.mapper.WebApplicationMapperException
 import jakarta.annotation.security.RolesAllowed
 import jakarta.enterprise.context.ApplicationScoped
 import jakarta.inject.Inject
@@ -74,9 +75,21 @@ class EntryController {
     @POST @Path("/entry")
     @RolesAllowed("USER")
     @Transactional
-    fun save(@Valid payload: List<EntrySaveDto>, ctx: SecurityContext) {
+    fun persist(@Valid payload: List<EntrySaveDto>, ctx: SecurityContext) {
         val users = usersService.findByIdLong(ctx.userPrincipal.name.toLong())
 
+        payload.groupingBy { it.date }
+            .eachCount()
+            .filter { it.value > 1 }
+            .values
+            .let {
+                if (it.isNotEmpty()) {
+                    throw WebApplicationMapperException("Duplicate date entries are not allowed", 422)
+                }
+            }
+        
+        entryService.findByUserIdAndDateException(ctx.userPrincipal.name.toLong(), payload.map { it.date })
+        
         payload.forEach {
             entryService.persistOne(Entry().apply {
                 mood = it.mood
