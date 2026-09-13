@@ -14,7 +14,7 @@
     "@eslint/create-config": "2.0.0",
     "@eslint/js": "^9.39.5",
     "@typescript-eslint/eslint-plugin": "^8.62.1",
-    "@typescript-eslint/parser": "^8.69.0",
+    "@typescript-eslint/parser": "^8.70.0",
     "globals": "^17.12.0",
     "autoprefixer": "^10.5.4",
     "esbuild-sass-plugin": "^3.6.0",
